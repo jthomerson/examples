@@ -1,0 +1,22 @@
+service: pingable-api
+
+provider:
+   name: aws
+   endpointType: regional
+
+functions:
+   restAPI:
+      name: 'pingable-api-rest-api'
+      handler: src/API.handler
+      memorySize: 128
+      timeout: 1
+      events:
+         - http: 'ANY /{proxy+}'
+   httpAPI:
+      name: 'pingable-api-http-api'
+      handler: src/API.handler
+      memorySize: 128
+      timeout: 1
+      events:
+         - httpApi: '*'
+         - httpApi: { method: 'GET', path: '/ping' }
