@@ -1,0 +1,28 @@
+service: cors-api
+
+provider:
+   name: aws
+   endpointType: regional
+   httpApi:
+      cors:
+         allowedOrigins: [ '*' ]
+         allowedHeaders: [ 'Content-Type', 'Authorization' ]
+         allowedMethods: [ 'OPTIONS', 'GET' ]
+         allowCredentials: false
+         maxAge: 28800 # 8 hours
+
+functions:
+   restAPI:
+      name: 'cors-api-rest-api'
+      handler: src/API.handler
+      memorySize: 128
+      timeout: 1
+      events:
+         - http: 'ANY /{proxy+}'
+   httpAPI:
+      name: 'cors-api-http-api'
+      handler: src/API.handler
+      memorySize: 128
+      timeout: 1
+      events:
+         - httpApi: 'GET /{proxy+}'
